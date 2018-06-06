@@ -1,34 +1,5 @@
 package io.oasp.gastronomy.restaurant.offermanagement.logic.impl;
 
-import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
-import io.oasp.gastronomy.restaurant.general.logic.api.to.BinaryObjectEto;
-import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
-import io.oasp.gastronomy.restaurant.general.logic.base.UcManageBinaryObject;
-import io.oasp.gastronomy.restaurant.offermanagement.common.api.Product;
-import io.oasp.gastronomy.restaurant.offermanagement.common.api.datatype.ProductType;
-import io.oasp.gastronomy.restaurant.offermanagement.common.api.exception.OfferEmptyException;
-import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.OfferEntity;
-import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.ProductEntity;
-import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.DrinkDao;
-import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.MealDao;
-import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.OfferDao;
-import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.ProductDao;
-import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.SideDishDao;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.Offermanagement;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.DrinkEto;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.MealEto;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferCto;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferEto;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferFilter;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferSearchCriteriaTo;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferSortBy;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductFilter;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductSearchCriteriaTo;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductSortBy;
-import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SideDishEto;
-import io.oasp.module.jpa.common.api.to.PaginatedListTo;
-
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +16,40 @@ import net.sf.mmm.util.exception.api.ObjectNotFoundUserException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.oasp.gastronomy.restaurant.general.common.api.constants.PermissionConstants;
+import io.oasp.gastronomy.restaurant.general.logic.api.to.BinaryObjectEto;
+import io.oasp.gastronomy.restaurant.general.logic.base.AbstractComponentFacade;
+import io.oasp.gastronomy.restaurant.general.logic.base.UcManageBinaryObject;
+import io.oasp.gastronomy.restaurant.offermanagement.common.api.Product;
+import io.oasp.gastronomy.restaurant.offermanagement.common.api.datatype.ProductType;
+import io.oasp.gastronomy.restaurant.offermanagement.common.api.exception.OfferEmptyException;
+import io.oasp.gastronomy.restaurant.offermanagement.common.api.exception.SpecialEmptyException;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.OfferEntity;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.ProductEntity;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.SpecialEntity;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.DrinkDao;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.MealDao;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.OfferDao;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.ProductDao;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.SideDishDao;
+import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.dao.SpecialDao;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.Offermanagement;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.DrinkEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.MealEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferCto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferFilter;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferSearchCriteriaTo;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.OfferSortBy;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductFilter;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductSearchCriteriaTo;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductSortBy;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SideDishEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SpecialEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SpecialSearchCriteriaTo;
+import io.oasp.module.jpa.common.api.to.PaginatedListTo;
 
 /**
  * Implementation class for {@link Offermanagement}.
@@ -70,6 +75,9 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
 
   /** @see #setSideDishDao(SideDishDao) */
   private SideDishDao sideDishDao;
+
+  /** @see #setSpecialDao(SpecialDao) */
+  private SpecialDao specialDao;
 
   /** **/
   private UcManageBinaryObject ucManageBinaryObject;
@@ -417,6 +425,51 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
     return mapPaginatedEntityList(products, ProductEto.class);
   }
 
+  @Override
+  @RolesAllowed(PermissionConstants.FIND_SPECIAL_OFFER)
+  public SpecialEto findSpecialOffer(Long id) {
+
+    LOG.debug("Get SpecialEto with id '{}' from database.", id);
+    return getBeanMapper().map(getSpecialDao().find(id), SpecialEto.class);
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.FIND_SPECIAL_OFFER)
+  public List<SpecialEto> findAllSpecialOffers() {
+
+    LOG.debug("Get all special offers from database.");
+    return getBeanMapper().mapList(getSpecialDao().findAll(), SpecialEto.class);
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.FIND_SPECIAL_OFFER)
+  public List<SpecialEto> findActiveSpecials(SpecialSearchCriteriaTo criteria) {
+
+    LOG.debug("Get all special offers from database.");
+    return getBeanMapper().mapList(getSpecialDao().findActiveSpecials(criteria), SpecialEto.class);
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.DELETE_SPECIAL_OFFER)
+  public void deleteSpecialOffer(Long id) {
+
+    getSpecialDao().delete(id);
+  }
+
+  @Override
+  @RolesAllowed(PermissionConstants.SAVE_SPECIAL_OFFER)
+  public SpecialEto saveSpecialOffer(@Valid SpecialEto special) {
+
+    Objects.requireNonNull(special, "special");
+
+    if (special.getOffer().getId() == null) {
+      throw new SpecialEmptyException(special);
+    } else {
+      SpecialEntity specialEntity = getSpecialDao().save(getBeanMapper().map(special, SpecialEntity.class));
+      return getBeanMapper().map(specialEntity, SpecialEto.class);
+    }
+  }
+
   /**
    * @return {@link OfferDao} instance.
    */
@@ -497,6 +550,23 @@ public class OffermanagementImpl extends AbstractComponentFacade implements Offe
   public void setSideDishDao(SideDishDao sideDishDao) {
 
     this.sideDishDao = sideDishDao;
+  }
+
+  /**
+   * @return specialDao
+   */
+  @Inject
+  public SpecialDao getSpecialDao() {
+
+    return this.specialDao;
+  }
+
+  /**
+   * @param specialDao new value of {@link #getspecialDao}.
+   */
+  public void setSpecialDao(SpecialDao specialDao) {
+
+    this.specialDao = specialDao;
   }
 
 }
