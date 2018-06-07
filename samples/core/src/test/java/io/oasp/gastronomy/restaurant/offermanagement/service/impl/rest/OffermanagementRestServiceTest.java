@@ -9,6 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import io.oasp.gastronomy.restaurant.general.common.base.AbstractRestServiceTest;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SpecialEto;
 import io.oasp.gastronomy.restaurant.offermanagement.service.api.rest.OffermanagementRestService;
 import io.oasp.module.service.common.api.client.ServiceClientFactory;
 
@@ -56,6 +57,17 @@ public class OffermanagementRestServiceTest extends AbstractRestServiceTest {
   @Test
   public void testFindSpecialOffer() {
 
+    // given
+    SpecialEto special = this.helper.createSpecial(1L);
+    SpecialEto savedSpecial = this.service.saveSpecial(special);
+
+    // when
+    SpecialEto find = this.service.getSpecialOffer(savedSpecial.getId());
+
+    // then
+    assertThat(find).isNotNull();
+    assertThat(find).isEqualTo(savedSpecial);
+    assertThat(find.getName()).isEqualTo(savedSpecial.getName());
   }
 
 }
