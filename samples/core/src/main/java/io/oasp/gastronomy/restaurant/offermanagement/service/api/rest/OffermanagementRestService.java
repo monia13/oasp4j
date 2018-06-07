@@ -34,6 +34,8 @@ import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductFilter;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductSearchCriteriaTo;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.ProductSortBy;
 import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SideDishEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SpecialEto;
+import io.oasp.gastronomy.restaurant.offermanagement.logic.api.to.SpecialSearchCriteriaTo;
 import io.oasp.gastronomy.restaurant.offermanagement.service.impl.rest.OffermanagementRestServiceImpl;
 import io.oasp.module.jpa.common.api.to.PaginatedListTo;
 
@@ -243,7 +245,7 @@ public interface OffermanagementRestService extends RestService {
   public void updateProductPicture(@PathParam("id") long productId,
       @Multipart(value = "binaryObjectEto", type = MediaType.APPLICATION_JSON) BinaryObjectEto binaryObjectEto,
       @Multipart(value = "blob", type = MediaType.APPLICATION_OCTET_STREAM) InputStream picture)
-          throws SerialException, SQLException, IOException;
+      throws SerialException, SQLException, IOException;
 
   @SuppressWarnings("javadoc")
   @Produces("multipart/mixed")
@@ -282,4 +284,45 @@ public interface OffermanagementRestService extends RestService {
   @Path("/product/search")
   @POST
   public PaginatedListTo<ProductEto> findProductEtosByPost(ProductSearchCriteriaTo searchCriteriaTo);
+
+  /**
+   * Delegates to {@link Offermanagement#getActiveSpecials}.
+   *
+   * @return all {@link SpecialEto}s as list
+   */
+  @GET
+  @Path("/activeSpecials/")
+  public List<SpecialEto> getActiveSpecials(SpecialSearchCriteriaTo searchCriteria);
+
+  /**
+   * Delegates to {@link Offermanagement#saveSpecial}.
+   *
+   * @return the saved {@link SpecialEto}
+   */
+  @POST
+  @Path("/saveSpecial/")
+  public SpecialEto saveSpecial(SpecialEto special);
+
+  /**
+   * Delegates to {@link Offermanagement#deleteSpecial}.
+   *
+   * @param id ID of the SpecialEto to delete
+   */
+  @DELETE
+  @Path("/special/{id}")
+  void deleteSpecial(@PathParam("id") Long id);
+
+  /**
+   * Delegates to {@link Offermanagement#findSpecialOffer}.
+   *
+   * @param id the ID of the {@link SpecialEto}
+   * @return the {@link SpecialEto}
+   */
+  @GET
+  @Path("/special/{id}")
+  SpecialEto getSpecialOffer(@PathParam("id") Long id);
+
+  @PUT
+  @Path("/special/")
+  SpecialEto updateSpecial(SpecialEto special);
 }
